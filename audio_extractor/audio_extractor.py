@@ -60,7 +60,7 @@ def load_clip_list(clip_list):
 
 # Defina o diretório que você deseja verificar
 # OBS: Mude 'C:/caminho/para/sua/pasta' para o caminho real no seu sistema
-target_path = os.getcwd
+target_path = os.getcwd()
 
 clip_list = clips_selector(target_path)
 
@@ -75,11 +75,11 @@ else:
 #Cria a pasta de output
 def dir_verification (origin, target):
     origin_path = Path(origin)
-    target_path = origin/target
+    target_path = Path(origin_path / Path(target))
     return target_path.is_dir()
 
-if not dir_verification(target_path, 'output_audios'):
-    os.mkdir('output_audios')
+if not dir_verification(target_path, "output_audios"):
+    os.makedirs('./output_audios/')
 
 #Define o nome do arquivo de saída com o formato desejado (ex: .wav)
 loaded_clip_list = load_clip_list(clip_list)
@@ -88,8 +88,8 @@ loaded_clip_list = load_clip_list(clip_list)
 # 2. Extrai e salva o áudio no formato desejado
 # O parâmetro 'codec' pode ser útil para MP3 (libmp3lame é o padrão).
 # Para WAV, o formato geralmente é 'pcm_s16le'
-for clip in load_clip_list:
-    audio_output = clip.filename[0:-4]
+for clip in loaded_clip_list:
+    audio_output = os.path.basename(clip.filename)[0:-4]
     output_audio_path = f"./output_audios/{audio_output}.wav"
     clip.audio.write_audiofile(output_audio_path,
                                 codec='pcm_s16le',
@@ -98,4 +98,4 @@ for clip in load_clip_list:
 
 # 3. Fecha o clipe
 
-print(f'{loaded_clip_list.__len__} aúdios extraídos e salvos com sucesso na pasta output_videos')
+print(f'{len(loaded_clip_list)} aúdios extraídos e salvos com sucesso na pasta output_videos')
